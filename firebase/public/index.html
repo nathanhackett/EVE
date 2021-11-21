@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EVE</title>
+  <link rel="stylesheet" type="text/css" href="style.css"/>
+  <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+  <!-- Add icon library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
+
+  <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.js"></script>
+
+  <!-- JSX -->
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-auth.js"></script>
+
+  <script>
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    var firebaseConfig = {
+      apiKey: "AIzaSyDNBcBRan3LmLiiLY9IMtD37HaXKrYHsNs",
+      authDomain: "cs353-ca3de.firebaseapp.com",
+      databaseURL: "https://cs353-ca3de.firebaseio.com",
+      projectId: "cs353-ca3de",
+      storageBucket: "cs353-ca3de.appspot.com",
+      messagingSenderId: "86827310912",
+      appId: "1:86827310912:web:4b6cf168b0454c38ebe4a5",
+      measurementId: "G-X1G9XXM2QF"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+  </script>
+
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfgJwdPBOHouIM_O5xt7NPyK9OgrTNEvo&callback=initMap&libraries=&v=weekly"
+    defer>
+  </script>
+
+
+</head>
+
+<body>
+  <div id="map"></div>
+  
+
+  <div class="rectangle"></div>
+  <div class="rectangle2"></div>
+  <div class="guitop">
+    <button onclick="document.getElementById('id01').style.display='block'" class="checkBalanceButton">
+      <div class="text-dark">$</div>
+    </button>
+    <section id="whenSignedOut">
+      <button id="signInBtn" class="btn btn-primary">Sign in with Google</button>
+    </section>
+    <section id="whenSignedIn" hidden="true">
+      <button id="signOutBtn" class="btn btn-primary">Sign Out</button>
+    </section>
+    <div id="id01" class="box animate">
+      <div class="box-content">
+        <div class="container">
+          <h4>Balance</h4>
+          <div class="alertBubble">
+            <span>Balance: X</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button onclick="document.getElementById('id02').style.display='block'" class="alertsButton">
+      <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bell" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2z"/>
+        <path fill-rule="evenodd" d="M8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+      </svg>
+    </button>
+    <div id="id02" class="box animate">
+      <div class="box-content">
+        <div class="container">
+          <h4>Notifications</h4>
+          <div class="alertBubble">
+            <ul id="notification">
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button onclick="document.getElementById('id03').style.display='block'" class="profileButton">
+      <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+      </svg>
+    </button>
+    <div id="id03" class="box animate">
+      <div class="box-content">
+        <div class="container">
+          <div class="avatar">
+            <img src="img_avatar2.png" alt="Avatar" class="avatar">
+          </div>
+          <!-- <button class="alertBubble">
+            <span>Create New Station</span>
+          </button> -->
+          <h2>Add New Station:</h2>
+          <form class="stationForm">
+            <!-- <label for="address">Address: </label> -->
+            <textarea name="address" placeholder="Address e.g.&#10;321 Hugh Lane&#10;Dublin" style="border: 0px"></textarea>
+            <br/>
+            <br/>
+            <!-- <label for="rate">Rate(€ per hour): </label> -->
+            <input type="number" step="0.01" id="rate" name="rate" placeholder="Rate(€ per hour)">
+            <br/>
+            <br/>
+            <!-- <label for="latitude">Latitude: </label> -->
+            <input type="number" step="0.01" id="latitude" name="latitude" placeholder="Latitude">
+            <br/>
+            <br/>
+            <!-- <label for="longitude">Longitude: </label> -->
+            <input type="number" step="0.01" id="longitude" name="longitude" placeholder="Longitude">
+            <p class="error"></p>
+            <input id="submit" name="Submit" type="button" value="Add Station" onclick="addStation(this.parentElement)">
+          </form>
+        </div>
+      </div>
+    </div>
+    <h2 class="display-4">EVE</h2>
+  </div>
+  <div class="guitopborder"></div>
+  <script src="index.js"></script>
+</body>
+
+
+
+</html>
